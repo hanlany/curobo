@@ -81,6 +81,7 @@ def bench_collision_curobo(robot_file, world_file, q_test, use_cuda_graph=True):
         out = arm_base.rollout_constraint(q_test)
 
         torch.cuda.synchronize()
+        q_test_cpu = q_test.cpu()
         dt = time.time() - st_time
     else:
         q = q_warm.clone()
@@ -112,6 +113,7 @@ def bench_collision_curobo(robot_file, world_file, q_test, use_cuda_graph=True):
         # print(a)
         # a = ee_mat.clone()
         torch.cuda.synchronize()
+        a_cpu = a.cpu()
         dt = time.time() - st_time
     return dt
 
@@ -190,7 +192,8 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    b_list = [1, 10, 100, 1000, 10000]
+    b_list = [1, 10, 100, 1000, 10000, 100000]
+    # b_list = [1]
 
     robot_list = get_robot_list()
 
